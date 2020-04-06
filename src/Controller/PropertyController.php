@@ -30,30 +30,29 @@ class PropertyController extends AbstractController
    */
   public function index(): Response
   {
-
-    // Exemple d'enregistrement d'un bien dans la base
-    // $property = new Property();
-    // $property->setTitle('Mon deuxième bien')
-    //   ->setPrice(450000)
-    //   ->setRooms(5)
-    //   ->setBedrooms(3)
-    //   ->setDescription('Une autre petite description')
-    //   ->setSurface(85)
-    //   ->setFloor(4)
-    //   ->setHeat(0)
-    //   ->setCity('Gif-sur-Yvette')
-    //   ->setAddress('10 avenue du Général Leclerc')
-    //   ->setPostalCode('91190');
-    // $em = $this->getDoctrine()->getManager();
-    // $em->persist($property);
-    // $em->flush();
-
-    $prop = $this->repository->findAll();
-    dump($prop);
-
-
-    // return new Response("Liste des biens");
     return $this->render('property/index.html.twig',[
+      'current_menu' => 'properties'
+    ]);
+  }
+
+
+  /**
+   * @Route("/biens/{slug}-{id}", name="property.show", requirements={"slug": "[a-z0-9\-]*"})
+   * @param Property $property
+   * @return Response
+   */
+  public function show(Property $property, string $slug): Response
+  {
+    // $property = $this->repository->find($id);
+    if ( $property->getSlug() !== $slug )
+    {
+      return $this->redirectToRoute('property.show',[
+        'id' => $property->getId(),
+        'slug' => $property->getSlug()
+      ], 301); // 301 : Permanent redirection
+    }
+    return $this->render('property/show.html.twig', [
+      'property' => $property,
       'current_menu' => 'properties'
     ]);
   }
