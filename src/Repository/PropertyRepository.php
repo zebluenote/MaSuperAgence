@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Property;
+use App\Entity\PropertySearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -20,14 +21,25 @@ class PropertyRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Property[]
+     * @return Query
      */
-    public function findAllVisible(): array
+    public function findAllVisibleQuery(PropertySearch $search)
     {
-      return $this->findVisibleQuery('p')
-        ->where('p.sold = false')
-        ->getQuery()
-        ->getResult();
+      $query = $this->findVisibleQuery();
+
+      if ($search->getMaxPrice()) {
+        $query = $query
+          ->andwhere('p.price <= :maxprice')
+          ->setParameter('maxprice', $search->getMaxPrice());
+      }
+
+      if ($search->getMinSurface()) {
+        $query = $query
+          ->andwhere('p.surface >= :minsurface')
+          ->setParameter('minsurface', $search->getMinSurface());
+      }
+
+      return $query->getQuery();
     }
 
     /**
@@ -35,8 +47,7 @@ class PropertyRepository extends ServiceEntityRepository
      */
     public function findLatest(): array
     {
-      return $this->findVisibleQuery('p')
-        ->where('p.sold = false')
+      return $this->findVisibleQuery()
         ->setmaxResults(4)
         ->getQuery()
         ->getResult();
@@ -44,7 +55,7 @@ class PropertyRepository extends ServiceEntityRepository
 
     private function findVisibleQuery()
     {
-      return $this->createQueryBuilder('p')->where('p.sold = false');
+      return $this->createQueryBuilder('p')->where('p.sold = :sold')->setParameter(':sold', false);
     }
 
 
