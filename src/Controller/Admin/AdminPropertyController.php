@@ -2,7 +2,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Property;
+use App\Entity\Option;
 use App\Form\PropertyType;
+use App\Form\OptionType;
 use App\Repository\PropertyRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -69,6 +71,7 @@ class AdminPropertyController extends AbstractController
      */
     public function edit(Property $property, Request $request)
     {
+
       $form = $this->createForm(PropertyType::class, $property);
       $form->handleRequest($request);
 
