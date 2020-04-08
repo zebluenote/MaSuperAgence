@@ -52,7 +52,6 @@ class PropertySearchType extends AbstractType
 
     public function getBlockPrefix()
     {
-      return '';
+        return '';
     }
-
 }
