@@ -4,6 +4,9 @@
 .env.local
 .env.local.php
 .env.*.local
+public/images/
+public/media/
+
 /.env
 /.env.local
 /.env.local.php
@@ -19,3 +22,7 @@
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###

@@ -32,4 +32,9 @@ services:
     #     $twig: '@twig'
 
 
+    App\Listener\ImageCacheSubscriber:
+      tags :
+        - { name: 'doctrine.event_subscriber' }
+
+
     Doctrine\Common\Persistence\ObjectManager: '@doctrine.orm.default_entity_manager'
